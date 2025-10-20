@@ -1,0 +1,188 @@
+// Quote database
+const quotes = [
+    {
+        text: "The only way to do great work is to love what you do.",
+        author: "Steve Jobs",
+        category: "motivation"
+    },
+    {
+        text: "Innovation distinguishes between a leader and a follower.",
+        author: "Steve Jobs",
+        category: "success"
+    },
+    {
+        text: "Your time is limited, so don't waste it living someone else's life.",
+        author: "Steve Jobs",
+        category: "life"
+    },
+    {
+        text: "Stay hungry, stay foolish.",
+        author: "Steve Jobs",
+        category: "wisdom"
+    },
+    {
+        text: "Life is what happens to you while you're busy making other plans.",
+        author: "John Lennon",
+        category: "life"
+    },
+    {
+        text: "The future belongs to those who believe in the beauty of their dreams.",
+        author: "Eleanor Roosevelt",
+        category: "motivation"
+    },
+    {
+        text: "It is during our darkest moments that we must focus to see the light.",
+        author: "Aristotle",
+        category: "wisdom"
+    },
+    {
+        text: "Whoever is happy will make others happy too.",
+        author: "Anne Frank",
+        category: "life"
+    },
+    {
+        text: "Do not go where the path may lead, go instead where there is no path and leave a trail.",
+        author: "Ralph Waldo Emerson",
+        category: "success"
+    },
+    {
+        text: "You will face many defeats in life, but never let yourself be defeated.",
+        author: "Maya Angelou",
+        category: "motivation"
+    },
+    {
+        text: "The greatest glory in living lies not in never falling, but in rising every time we fall.",
+        author: "Nelson Mandela",
+        category: "success"
+    },
+    {
+        text: "In the end, it's not the years in your life that count. It's the life in your years.",
+        author: "Abraham Lincoln",
+        category: "life"
+    },
+    {
+        text: "Life is either a daring adventure or nothing at all.",
+        author: "Helen Keller",
+        category: "life"
+    },
+    {
+        text: "Many of life's failures are people who did not realize how close they were to success when they gave up.",
+        author: "Thomas A. Edison",
+        category: "success"
+    },
+    {
+        text: "You have brains in your head. You have feet in your shoes. You can steer yourself any direction you choose.",
+        author: "Dr. Seuss",
+        category: "motivation"
+    }
+];
+
+// DOM Elements
+const quoteTextElement = document.getElementById('quote-text');
+const quoteAuthorElement = document.getElementById('quote-author');
+const generateButton = document.getElementById('generate-btn');
+const copyButton = document.getElementById('copy-btn');
+const tweetButton = document.getElementById('tweet-btn');
+const categoryButtons = document.querySelectorAll('.category-btn');
+
+// Current category filter
+let currentCategory = 'all';
+
+// Function to get a random quote
+function getRandomQuote() {
+    // Show loading state
+    quoteTextElement.innerHTML = '<div class="loading"><div class="spinner"></div>Loading an inspiring quote...</div>';
+    quoteAuthorElement.textContent = '';
+    
+    // Filter quotes by category
+    const filteredQuotes = currentCategory === 'all' 
+        ? quotes 
+        : quotes.filter(quote => quote.category === currentCategory);
+    
+    // Simulate a small delay for better UX
+    setTimeout(() => {
+        if (filteredQuotes.length === 0) {
+            quoteTextElement.textContent = "No quotes found for this category. Try another one!";
+            quoteAuthorElement.textContent = "";
+            return;
+        }
+        
+        const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
+        const randomQuote = filteredQuotes[randomIndex];
+        
+        // Apply fade-in animation
+        quoteTextElement.classList.remove('fade-in');
+        quoteAuthorElement.classList.remove('fade-in');
+        
+        // Update quote text and author
+        quoteTextElement.textContent = randomQuote.text;
+        quoteAuthorElement.textContent = randomQuote.author;
+        
+        // Trigger reflow for animation
+        void quoteTextElement.offsetWidth;
+        void quoteAuthorElement.offsetWidth;
+        
+        // Add fade-in animation
+        quoteTextElement.classList.add('fade-in');
+        quoteAuthorElement.classList.add('fade-in');
+    }, 500);
+}
+
+// Function to copy quote to clipboard
+function copyQuoteToClipboard() {
+    const quote = `${quoteTextElement.textContent} — ${quoteAuthorElement.textContent}`;
+    
+    navigator.clipboard.writeText(quote)
+        .then(() => {
+            // Visual feedback for successful copy
+            const originalText = copyButton.innerHTML;
+            copyButton.innerHTML = '<span class="btn-icon">✓</span> Copied!';
+            
+            setTimeout(() => {
+                copyButton.innerHTML = originalText;
+            }, 2000);
+        })
+        .catch(err => {
+            console.error('Failed to copy: ', err);
+            alert('Failed to copy quote to clipboard');
+        });
+}
+
+// Function to share quote on Twitter
+function shareOnTwitter() {
+    const quote = `${quoteTextElement.textContent} — ${quoteAuthorElement.textContent}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(quote)}`;
+    window.open(twitterUrl, '_blank');
+}
+
+// Function to set active category
+function setActiveCategory(category) {
+    currentCategory = category;
+    
+    // Update active button styling
+    categoryButtons.forEach(button => {
+        if (button.dataset.category === category) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    });
+    
+    // Generate a new quote from the selected category
+    getRandomQuote();
+}
+
+// Event Listeners
+generateButton.addEventListener('click', getRandomQuote);
+copyButton.addEventListener('click', copyQuoteToClipboard);
+tweetButton.addEventListener('click', shareOnTwitter);
+
+// Add event listeners to category buttons
+categoryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        setActiveCategory(button.dataset.category);
+    });
+});
+
+// Initialize with a random quote
+getRandomQuote();
