@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspirational Quote Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Inspirational Quotes</h1>
+        
+        <div class="category-selector">
+            <button class="category-btn active" data-category="all">All</button>
+            <button class="category-btn" data-category="motivation">Motivation</button>
+            <button class="category-btn" data-category="success">Success</button>
+            <button class="category-btn" data-category="life">Life</button>
+            <button class="category-btn" data-category="wisdom">Wisdom</button>
+        </div>
+        
+        <div class="quote-container">
+            <div class="quote-text" id="quote-text">
+                Click the button to generate a random inspirational quote
+            </div>
+            <div class="quote-author" id="quote-author"></div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-primary" id="generate-btn">
+                <span class="btn-icon">✨</span>
+                Generate Quote
+            </button>
+            <button class="btn btn-secondary" id="copy-btn">
+                <span class="btn-icon">📋</span>
+                Copy Quote
+            </button>
+            <button class="btn btn-secondary" id="tweet-btn">
+                <span class="btn-icon">🐦</span>
+                Tweet Quote
+            </button>
+        </div>
+        
+        <footer>
+            Made with ❤️ for inspiration seekers
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
